@@ -8,7 +8,7 @@ from ConfigParser import ConfigParser
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio, GLib
-from library.keychain import Keychain
+from keychain.keychain import Keychain
 from gui.window import Window
 from os import path
 
