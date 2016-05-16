@@ -1,5 +1,5 @@
 # Initial setup
-Before you launch PASSPY for the first time, you have to define the path to your 1Password.agilekeychain and the vault that you want to use in the file pass.cfg.
+Before you launch PASSPY for the first time, you have to define the path to your 1Password.agilekeychain and the vault that you want to use. This is done in the section "keychain" of "pass.cfg".
 
 For fedora and probably other distributions there is an install.sh which creates an alias for your terminal and a .desktop file. This enables you to launch PASSPY like any other GNOME application but efore you can do so, you have to restart the GNOME shell (press Alt+F2 and enter "r").
 
