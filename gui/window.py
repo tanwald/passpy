@@ -3,6 +3,7 @@ import logging
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from os import path
 from loginview import LoginView
 from mainview import MainView
 
@@ -16,6 +17,12 @@ class Window(Gtk.ApplicationWindow):
             application=app,
             default_width=app.WIN_WIDTH,
             default_height=app.WIN_HEIGHT
+        )
+        self.set_icon_from_file(
+            path.join(
+                path.dirname(path.abspath(__file__)),
+                '../resources/logo.desktop.png'
+            )
         )
 
         logger.debug('Creating LoginView...')
