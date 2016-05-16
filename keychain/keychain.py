@@ -53,6 +53,7 @@ class Keychain(object):
             name = unicode(itemInfo[2])
             if not type.startswith('system') and not type.startswith('secure'):
                 item = KeychainItem(self, identifier, type, name, self.entryConfig)
+                logger.debug(item)
                 self.itemIndexName[name] = item
                 if item.type in self.itemIndexType:
                     self.itemIndexType[item.type][item.name] = item
