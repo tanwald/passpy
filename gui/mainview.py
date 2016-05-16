@@ -35,7 +35,7 @@ class MainView(object):
         self.categoriesListModel.append(
             [self.ALL_CATEGORIES, self.ALL_CATEGORIES]
         )
-        for category in sorted(self.app.getCategories()):
+        for category in self.app.getCategories():
             self.categoriesListModel.append(
                 [self.app.bundle[category], category]
             )
@@ -100,6 +100,7 @@ class MainView(object):
             self.itemListModel.append([itemName])
 
     def setItemData(self):
+        # key value data
         self.itemInfoModel = Gtk.ListStore(str, str, str)
         self.itemInfoView = Gtk.TreeView(model=self.itemInfoModel)
         for i in range(2):
@@ -107,13 +108,38 @@ class MainView(object):
             col = Gtk.TreeViewColumn(' ', cell, text=i)
             self.itemInfoView.append_column(col)
 
-        scrollItemInfoView = Gtk.ScrolledWindow()
-        scrollItemInfoView.add(self.itemInfoView)
+        self.scrollItemInfoView = Gtk.ScrolledWindow()
+        self.scrollItemInfoView.add(self.itemInfoView)
 
         itemInfoSelection = self.itemInfoView.get_selection()
         itemInfoSelection.connect('changed', self.onItemEntrySelection)
 
-        self.grid.attach(scrollItemInfoView, 2, 1, 2, 1)
+        # plain text data
+        self.textBuffer = Gtk.TextBuffer()
+        textView = Gtk.TextView(
+            buffer=self.textBuffer,
+            wrap_mode=Gtk.WrapMode.WORD,
+            editable=False,
+            top_margin=25,
+            right_margin=25,
+            bottom_margin=25,
+            left_margin=25
+        )
+        textView.set_cursor_visible(False)
+
+        self.scrollTextView = Gtk.ScrolledWindow()
+        self.scrollTextView.set_policy(
+            Gtk.PolicyType.AUTOMATIC,
+            Gtk.PolicyType.AUTOMATIC
+        )
+        self.scrollTextView.add(textView)
+
+        # stack
+        self.itemDataStack = Gtk.Stack()
+        self.itemDataStack.add_named(self.scrollItemInfoView, 'key-value')
+        self.itemDataStack.add_named(self.scrollTextView, 'plain-text')
+
+        self.grid.attach(self.itemDataStack, 2, 1, 2, 1)
 
     def updateItemData(self, itemName):
         self.itemInfoModel.clear()
@@ -126,19 +152,29 @@ class MainView(object):
         if item:
             item.decrypt()
             self.itemLabel.set_text(itemName)
-            for entry in item.getEntries():
-                if entry.isVisible:
-                    if entry.isUsername:
-                        self.itemInfoModel.insert(
-                            0,
-                            [entry.getKey(), entry.getValue(),
-                             unicode(entry.value)]
-                        )
-                    else:
-                        self.itemInfoModel.append(
-                            [entry.getKey(), entry.getValue(),
-                             unicode(entry.value)]
-                        )
+            if item.type == 'securenotes.SecureNote':
+                self.textBuffer.set_text(
+                    item.getEntries()[0].getValue(trimmed=False)
+                )
+                self.itemDataStack.set_visible_child(self.scrollTextView)
+            else:
+                self.insertEntries(item)
+                self.itemDataStack.set_visible_child(self.scrollItemInfoView)
+
+    def insertEntries(self, item):
+        for entry in item.getEntries():
+            if entry.isVisible:
+                if entry.isUsername:
+                    self.itemInfoModel.insert(
+                        0,
+                        [entry.getKey(), entry.getValue(),
+                         unicode(entry.value)]
+                    )
+                else:
+                    self.itemInfoModel.append(
+                        [entry.getKey(), entry.getValue(),
+                         unicode(entry.value)]
+                    )
 
     def onSearch(self, entry):
         query = entry.get_text()

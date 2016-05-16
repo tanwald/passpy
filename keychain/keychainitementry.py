@@ -39,11 +39,11 @@ class KeychainItemEntry(object):
 
         return key.title()
 
-    def getValue(self):
+    def getValue(self, trimmed=True):
         value = unicode(self.value)
         if self.isSecret:
             value = '***'
-        elif len(value) > 40:
+        elif trimmed and len(value) > 40:
             value = '{}...'.format(value[:40])
 
         return value

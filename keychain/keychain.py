@@ -51,7 +51,7 @@ class Keychain(object):
             identifier = itemInfo[0]
             type = itemInfo[1]
             name = unicode(itemInfo[2])
-            if not type.startswith('system') and not type.startswith('secure'):
+            if not type.startswith('system'):
                 item = KeychainItem(self, identifier, type, name, self.entryConfig)
                 logger.debug(item)
                 self.itemIndexName[name] = item
