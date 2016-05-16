@@ -57,6 +57,7 @@ class MainView(object):
         self.search = Gtk.Entry()
         self.search.connect('changed', self.onSearch)
         self.search.connect('activate', self.onSearchEnter)
+        self.search.connect('focus-in-event', lambda x, y: x.set_text(''))
         self.itemLabel = Gtk.Label()
 
         self.grid.attach(self.logo, 0, 0, 1, 1)
