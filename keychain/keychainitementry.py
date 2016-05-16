@@ -21,6 +21,7 @@ class KeychainItemEntry(object):
         self.isUsername = designation == Designation.USER
         self.isPassword = designation == Designation.PW
         self.isSection = designation == Designation.SECTION
+        self.isUrl = designation == Designation.URL
         self.isSecret = isSecret or self.isPassword \
                                  or 'password' in key.lower() \
                                  or ('pin' in key.lower() and value.isdigit()) \

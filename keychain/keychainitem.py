@@ -93,7 +93,11 @@ class KeychainItem(object):
                 self.entries.append(entry)
         elif key == 'URLs':
             self.entries.append(
-                KeychainItemEntry('url', data['url'])
+                KeychainItemEntry(
+                    'Url',
+                    data['url'],
+                    designation=Designation.URL
+                )
             )
 
     def _buildSectionEntry(self, data):
