@@ -102,18 +102,18 @@ class MainView(object):
 
     def setItemData(self):
         # key value data
-        self.itemInfoModel = Gtk.ListStore(str, str, str)
-        self.itemInfoView = Gtk.TreeView(model=self.itemInfoModel)
+        self.itemDataModel = Gtk.ListStore(str, str, str)
+        self.itemDataView = Gtk.TreeView(model=self.itemDataModel)
         for i in range(2):
             cell = Gtk.CellRendererText()
             col = Gtk.TreeViewColumn(' ', cell, text=i)
-            self.itemInfoView.append_column(col)
+            self.itemDataView.append_column(col)
 
-        self.scrollItemInfoView = Gtk.ScrolledWindow()
-        self.scrollItemInfoView.add(self.itemInfoView)
+        self.scrollItemDataView = Gtk.ScrolledWindow()
+        self.scrollItemDataView.add(self.itemDataView)
 
-        itemInfoSelection = self.itemInfoView.get_selection()
-        itemInfoSelection.connect('changed', self.onItemEntrySelection)
+        itemEntrySelection = self.itemDataView.get_selection()
+        itemEntrySelection.connect('changed', self.onItemEntrySelection)
 
         # plain text data
         self.textBuffer = Gtk.TextBuffer()
@@ -137,13 +137,13 @@ class MainView(object):
 
         # stack
         self.itemDataStack = Gtk.Stack()
-        self.itemDataStack.add_named(self.scrollItemInfoView, 'key-value')
+        self.itemDataStack.add_named(self.scrollItemDataView, 'key-value')
         self.itemDataStack.add_named(self.scrollTextView, 'plain-text')
 
         self.grid.attach(self.itemDataStack, 2, 1, 2, 1)
 
     def updateItemData(self, itemName):
-        self.itemInfoModel.clear()
+        self.itemDataModel.clear()
         item = None
         try:
             item = self.items[itemName]
@@ -160,19 +160,19 @@ class MainView(object):
                 self.itemDataStack.set_visible_child(self.scrollTextView)
             else:
                 self.insertEntries(item)
-                self.itemDataStack.set_visible_child(self.scrollItemInfoView)
+                self.itemDataStack.set_visible_child(self.scrollItemDataView)
 
     def insertEntries(self, item):
         for entry in item.getEntries():
             if entry.isVisible:
                 if entry.isUsername:
-                    self.itemInfoModel.insert(
+                    self.itemDataModel.insert(
                         0,
                         [entry.getKey(), entry.getValue(),
                          unicode(entry.value)]
                     )
                 else:
-                    self.itemInfoModel.append(
+                    self.itemDataModel.append(
                         [entry.getKey(), entry.getValue(),
                          unicode(entry.value)]
                     )

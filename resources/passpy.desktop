@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Name=passpy
+Keywords=1password
+Exec=/path/to/pass.py
+Icon=/path/to/resources/logo.desktop.png
+Terminal=false
+Type=Application
+Categories=Utilities
