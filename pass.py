@@ -22,7 +22,7 @@ logger.setLevel(logging.INFO)
 logFormat = '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
 logfilePath = path.join(path.dirname(path.abspath(__file__)), 'pass.log')
 
-logfile = logging.FileHandler(logfilePath)
+logfile = logging.FileHandler(logfilePath, mode='w')
 logfile.setLevel(logging.INFO)
 logfile.setFormatter(logging.Formatter(logFormat))
 
