@@ -134,10 +134,6 @@ class MainView(object):
                             [entry.getKey(), entry.getValue(),
                              unicode(entry.value)]
                         )
-                    elif entry.isSection:
-                        self.itemInfoModel.append(
-                            [entry.getValue(), '', unicode(entry.value)]
-                        )
                     else:
                         self.itemInfoModel.append(
                             [entry.getKey(), entry.getValue(),

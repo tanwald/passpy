@@ -13,7 +13,9 @@ class KeychainItem(object):
         self.identifier = identifier
         self.type = type
         self.name = name
-        self.entryConfig = entryConfig
+        self.listed = entryConfig['listed']
+        self.excluded = entryConfig['excluded']
+        self.translate = entryConfig['translate']
 
         self.keyId = None
         self.securityLevel = None
@@ -61,12 +63,24 @@ class KeychainItem(object):
                     for entry in value:
                         self._buildListEntries(key, entry)
                         self._getEntries(entry, lastKey=key)
-            elif lastKey not in self.entryConfig['listed'] \
-                    and key not in self.entryConfig['excluded']:
-                self.entries.append(KeychainItemEntry(key, value))
+            elif lastKey not in self.listed \
+                    and key not in self.excluded:
+                self.entries.append(
+                    KeychainItemEntry(
+                        key,
+                        value,
+                        translate=self.translate
+                    )
+                )
             else:
                 self.entries.append(
-                    KeychainItemEntry(key, value, isVisible=False))
+                    KeychainItemEntry(
+                        key,
+                        value,
+                        isVisible=False,
+                        translate=self.translate
+                    )
+                )
 
     def _buildListEntries(self, key, data):
         if key == 'sections':
@@ -84,9 +98,10 @@ class KeychainItem(object):
 
     def _buildSectionEntry(self, data):
         return KeychainItemEntry(
-            'section',
             data['title'],
-            designation=Designation.SECTION
+            ' ',
+            designation=Designation.SECTION,
+            translate=self.translate
         )
 
     def _buildFieldEntry(self, data):
@@ -97,14 +112,16 @@ class KeychainItem(object):
             entry = KeychainItemEntry(
                 data['name'],
                 data['value'],
-                designation=data['designation']
+                designation=data['designation'],
+                translate=self.translate
             )
         elif 't' in data and 'v' in data:
             entry = KeychainItemEntry(
                 data['t'],
                 data['v'],
                 isSecret='k' in data \
-                         and data['k'] == 'concealed'
+                         and data['k'] == 'concealed',
+                translate=self.translate
             )
 
         return entry
@@ -116,7 +133,7 @@ class KeychainItem(object):
             if entry.isVisible:
                 entries = u'{}\n{}'.format(entries, entry)
 
-        return u'NAME {}\nTYPE {}\nENTRIES\n\n{}\n\nJSON\n\n{}\n\n'.format(
+        return u'\nNAME {}\nTYPE {}\nENTRIES\n\n{}\n\nJSON\n\n{}\n'.format(
             self.name.upper(),
             self.type,
             entries,

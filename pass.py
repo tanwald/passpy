@@ -50,6 +50,8 @@ class PassPy(Gtk.Application):
         self.VAULT = config.get('keychain', 'vault')
         self.LISTED = config.get('entries', 'listed').split(';')
         self.EXCLUDED = config.get('entries', 'excluded').split(';')
+        self.TRANSLATE = {k: v for k, v in config.items('translate')}
+        self.TRANSLATE['_'] = ' ' # ConfigParser strips whitespaces
         self.WIN_WIDTH = int(config.get('defaults', 'window.width'))
         self.WIN_HEIGHT = int(config.get('defaults', 'window.height'))
 
@@ -65,7 +67,11 @@ class PassPy(Gtk.Application):
         self.keychain = Keychain(
             self.KEYCHAIN_PATH,
             self.VAULT,
-            {'listed': self.LISTED, 'excluded': self.EXCLUDED}
+            {
+                'listed': self.LISTED,
+                'excluded': self.EXCLUDED,
+                'translate': self.TRANSLATE
+            }
         )
 
         self.bundle = {k: v for k, v in config.items('bundle')}

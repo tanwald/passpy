@@ -1,5 +1,5 @@
 import logging
-from utils import enum
+from utils import enum, translate
 
 Designation = enum(
     USER='username',
@@ -14,7 +14,7 @@ logger = logging.getLogger('PassPy.KeychainItemEntry')
 
 class KeychainItemEntry(object):
     def __init__(self, key, value, isSecret=False, isVisible=True,
-                 designation=Designation.OTHER):
+                 designation=Designation.OTHER, translate=None):
         self.key = key
         self.value = value
         self.designation = designation
@@ -22,17 +22,22 @@ class KeychainItemEntry(object):
         self.isPassword = designation == Designation.PW
         self.isSection = designation == Designation.SECTION
         self.isSecret = isSecret or self.isPassword \
-                                 or 'password' in key.lower()
+                                 or 'password' in key.lower() \
+                                 or ('pin' in key.lower() and value.isdigit()) \
+                                 or key == 'cvv'
         self.isVisible = isVisible
+        self.translate = translate
 
     def getKey(self):
+        key = self.key
         if self.isPassword:
             key = 'Password'
         elif self.isUsername:
             key = 'Username'
-        else:
-            key = self.key
-        return key.capitalize()
+        elif self.translate:
+            key = translate(self.key, self.translate)
+
+        return key.title()
 
     def getValue(self):
         value = unicode(self.value)
