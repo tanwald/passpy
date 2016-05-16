@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import sys
 
 from key import Key
 from keychainitem import KeychainItem
@@ -35,8 +36,15 @@ class Keychain(object):
 
     def loadKeys(self):
         path = os.path.join(self.vault, self.KEYS_FILE)
-        with open(path, 'r') as KEYS_FILE:
-            keyFileData = json.load(KEYS_FILE)
+        try:
+            with open(path, 'r') as KEYS_FILE:
+                keyFileData = json.load(KEYS_FILE)
+        except IOError, e:
+            logger.error('Could not read {}: {}'.format(path, e))
+            sys.exit(1)
+        except Exception, e:
+            logger.error('Error while reading {}: {}'.format(path, e))
+            sys.exit(1)
 
         for entry in keyFileData['list']:
             key = Key(**entry)
@@ -44,8 +52,15 @@ class Keychain(object):
 
     def loadItems(self):
         path = os.path.join(self.vault, self.CONTENTS_FILE)
-        with open(path, 'r') as CONTENTS_FILE:
-            items = json.load(CONTENTS_FILE)
+        try:
+            with open(path, 'r') as CONTENTS_FILE:
+                items = json.load(CONTENTS_FILE)
+        except IOError, e:
+            logger.error('Could not read {}: {}'.format(path, e))
+            sys.exit(1)
+        except Exception, e:
+            logger.error('Error while reading {}: {}'.format(path, e))
+            sys.exit(1)
 
         for itemInfo in items:
             identifier = itemInfo[0]
