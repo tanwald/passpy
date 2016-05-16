@@ -36,9 +36,14 @@ class MainView(object):
             [self.ALL_CATEGORIES, self.ALL_CATEGORIES]
         )
         for category in self.app.getCategories():
-            self.categoriesListModel.append(
-                [self.app.bundle[category], category]
-            )
+            try:
+                self.categoriesListModel.append(
+                    [self.app.bundle[category], category]
+                )
+            except KeyError, e:
+                logger.warn(
+                    'Tried to add an unknown category: {}'.format(e)
+                )
         self.categorySelection.select_iter(
             self.categoriesListModel.get_iter_first()
         )
