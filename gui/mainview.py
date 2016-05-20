@@ -126,12 +126,15 @@ class MainView(object):
             buffer=self.textBuffer,
             wrap_mode=Gtk.WrapMode.WORD,
             editable=False,
-            top_margin=25,
             right_margin=25,
-            bottom_margin=25,
             left_margin=25
         )
         textView.set_cursor_visible(False)
+        try:
+            textView.set_top_margin(25)
+            textView.set_bottom_margin(25)
+        except:
+            logger.warn('You are using an older version of pygobject.')
 
         self.scrollTextView = Gtk.ScrolledWindow()
         self.scrollTextView.set_policy(
