@@ -3,7 +3,6 @@ import logging
 
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from os import path
 from loginview import LoginView
 from mainview import MainView
 
