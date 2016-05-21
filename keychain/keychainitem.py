@@ -63,6 +63,8 @@ class KeychainItem(object):
                     for entry in value:
                         self._buildListEntries(key, entry)
                         self._getEntries(entry, lastKey=key)
+            elif isinstance(value, dict):
+                self._getEntries(value, lastKey=key)
             elif lastKey not in self.listed \
                     and key not in self.excluded:
                 self.entries.append(
