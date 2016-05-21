@@ -28,6 +28,8 @@ class MainView(object):
         self.setCategories()
         self.setItemList()
         self.setItemData()
+        self.itemLock = False
+        self.itemEntryLock = False
 
     def unlock(self):
         self.items = self.app.getItems()
@@ -214,21 +216,27 @@ class MainView(object):
                     name=self.search.get_text()
                 )
 
+            # don't update item selection during update
+            self.itemLock = True
             self.updateItemList(items)
+            self.itemLock = False
 
         return True
 
     def onItemSelection(self, selection):
         (model, iter) = selection.get_selected()
-        if iter:
+        if iter and not self.itemLock:
             itemName = model[iter][0]
+            # don't update item entry selection during update
+            self.itemEntryLock = True
             self.updateItemData(itemName)
+            self.itemEntryLock = False
 
         return True
 
     def onItemEntrySelection(self, selection):
         (model, iter) = selection.get_selected()
-        if iter:
+        if iter and not self.itemEntryLock:
             value = model[iter][2]
             self.clipboard.set_text(value, -1)
 
