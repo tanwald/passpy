@@ -103,9 +103,12 @@ class MainView(object):
         self.grid.attach(scrollItemListView, 1, 1, 1, 1)
 
     def updateItemList(self, items):
+        # don't update item selection during update
+        self.itemLock = True
         self.itemListModel.clear()
         for itemName in sorted(items.keys()):
             self.itemListModel.append([itemName])
+        self.itemLock = False
 
     def setItemData(self):
         # key value data
@@ -153,6 +156,8 @@ class MainView(object):
         self.grid.attach(self.itemDataStack, 2, 1, 2, 1)
 
     def updateItemData(self, itemName):
+        # don't update item entry selection during update
+        self.itemEntryLock = True
         self.itemDataModel.clear()
         item = None
         try:
@@ -171,6 +176,8 @@ class MainView(object):
             else:
                 self.insertEntries(item)
                 self.itemDataStack.set_visible_child(self.scrollItemDataView)
+
+        self.itemEntryLock = False
 
     def insertEntries(self, item):
         for entry in item.getEntries():
@@ -215,11 +222,7 @@ class MainView(object):
                     type=category,
                     name=self.search.get_text()
                 )
-
-            # don't update item selection during update
-            self.itemLock = True
             self.updateItemList(items)
-            self.itemLock = False
 
         return True
 
@@ -227,10 +230,7 @@ class MainView(object):
         (model, iter) = selection.get_selected()
         if iter and not self.itemLock:
             itemName = model[iter][0]
-            # don't update item entry selection during update
-            self.itemEntryLock = True
             self.updateItemData(itemName)
-            self.itemEntryLock = False
 
         return True
 
