@@ -45,7 +45,7 @@ class PassPy(Gtk.Application):
         )
 
         self.config = config
-        self.APPLICATION_NAME = 'passpy'
+        self.APPLICATION_NAME = 'PASSPY'
         self.KEYCHAIN_PATH = config.get('keychain', 'path')
         self.VAULT = config.get('keychain', 'vault')
         self.LISTED = config.get('entries', 'listed').split(';')
@@ -54,6 +54,10 @@ class PassPy(Gtk.Application):
         self.TRANSLATE['_'] = ' ' # ConfigParser strips whitespaces
         self.WIN_WIDTH = int(config.get('defaults', 'window.width'))
         self.WIN_HEIGHT = int(config.get('defaults', 'window.height'))
+        self.ICON = path.join(
+            path.dirname(path.abspath(__file__)),
+            'resources/logo.desktop.png'
+        )
 
         self.add_main_option(
             'debug',

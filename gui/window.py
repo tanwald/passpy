@@ -18,14 +18,7 @@ class Window(Gtk.ApplicationWindow):
             default_width=app.WIN_WIDTH,
             default_height=app.WIN_HEIGHT
         )
-        self.set_icon_from_file(
-            path.join(
-                path.dirname(path.abspath(__file__)),
-                '../resources/logo.desktop.png'
-            )
-        )
+        self.set_icon_from_file(app.ICON)
 
-        logger.debug('Creating LoginView...')
         self.loginView = LoginView(app, self)
-        logger.debug('Creating MainView...')
         self.mainView = MainView(app, self)
