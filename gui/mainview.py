@@ -28,6 +28,7 @@ class MainView(object):
         self.setCategories()
         self.setItemList()
         self.setItemData()
+        self.categoryLock = False
         self.itemLock = False
         self.itemEntryLock = False
 
@@ -217,12 +218,9 @@ class MainView(object):
             category = model[iter][1]
 
             if category == self.ALL_CATEGORIES:
-                items = self.app.getItems(name=self.search.get_text())
+                items = self.app.getItems()
             else:
-                items = self.app.getItems(
-                    type=category,
-                    name=self.search.get_text()
-                )
+                items = self.app.getItems(type=category)
             self.updateItemList(items)
 
         return True
