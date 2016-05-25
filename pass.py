@@ -54,10 +54,7 @@ class PassPy(Gtk.Application):
         self.TRANSLATE['_'] = ' ' # ConfigParser strips whitespaces
         self.WIN_WIDTH = int(config.get('defaults', 'window.width'))
         self.WIN_HEIGHT = int(config.get('defaults', 'window.height'))
-        self.ICON = path.join(
-            path.dirname(path.abspath(__file__)),
-            'resources/logo.desktop.png'
-        )
+        self.ICON = PassPy.getAbsPath('resources/logo.desktop.png')
 
         self.add_main_option(
             'debug',
@@ -108,6 +105,9 @@ class PassPy(Gtk.Application):
     def getCategories(self):
         return self.keychain.getCategories()
 
+    @staticmethod
+    def getAbsPath(relPath):
+        return path.join(path.dirname(path.abspath(__file__)), relPath)
 
 ################################################################################
 # MAIN
@@ -116,7 +116,7 @@ class PassPy(Gtk.Application):
 if __name__ == '__main__':
     config = ConfigParser()
     config.optionxform = str
-    config.read(path.join(path.dirname(path.abspath(__file__)), 'pass.cfg'))
+    config.read(PassPy.getAbsPath('pass.cfg'))
 
     app = PassPy(config)
     logger.info('Started')

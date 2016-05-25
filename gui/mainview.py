@@ -108,6 +108,7 @@ class MainView(object):
         self.itemListModel.clear()
         for itemName in sorted(items.keys()):
             self.itemListModel.append([itemName])
+
         self.itemLock = False
 
     def setItemData(self):
